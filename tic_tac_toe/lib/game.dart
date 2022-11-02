@@ -12,9 +12,11 @@ class _GamePageState extends State<GamePage> {
   static const String PLAYER_X = "X";
   static const String PLAYER_O = "O";
 
- // bool mode = true;
- // late String modeButtonText;
+  late bool mode = true;
+  late String modeButtonText;
 
+  bool setColor = false;
+  late MaterialColor buttonColor;
   late String currentPlayer;
   late bool gameEnd;
   late List<String> occupied;
@@ -26,26 +28,26 @@ class _GamePageState extends State<GamePage> {
   }
 
   void initializeGame() {
-    currentPlayer = PLAYER_X;
-      gameEnd = false;
-      occupied = ["", "", "", "", "", "", "", "", ""]; //9 empty places
-    /*if (mode) {
+    /*currentPlayer = PLAYER_X;
+    gameEnd = false;
+    occupied = ["", "", "", "", "", "", "", "", ""]; */ //9 empty places
+    if (mode) {
       currentPlayer = PLAYER_X;
       gameEnd = false;
       occupied = ["", "", "", "", "", "", "", "", ""]; //9 empty places
-      modeButtonText = 'change mode to 1vBot mode';
-
+      modeButtonText = 'change mode to 1 VS Random mode';
     } else {
       currentPlayer = PLAYER_X;
       gameEnd = false;
       occupied = ["", "", "", "", "", "", "", "", ""]; //9 empty places
       RandomicBotPlayer(gameEnd);
-      modeButtonText = 'return to 1v1 mode';
-    }*/
+      modeButtonText = 'return to 1 VS 1 mode';
+    }
   }
 
- /* void RandomicBotPlayer(bool gameEnd) {
+  void RandomicBotPlayer(bool gameEnd) {
     if (gameEnd) {
+      MaterialStateProperty.all(Colors.green);
       return;
     }
     bool moveDone = false;
@@ -54,12 +56,13 @@ class _GamePageState extends State<GamePage> {
       if (occupied[position] == '') {
         occupied[position] = PLAYER_O;
         moveDone = true;
+        print(occupied);
       }
     }
-    changeTurn();
+
     checkForDraw();
     checkForWinner();
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,21 +83,23 @@ class _GamePageState extends State<GamePage> {
   Widget _headerText() {
     return Column(
       children: [
-        const Text(
-          "Tic Tac Toe",
-          style: TextStyle(
-            backgroundColor: Color.fromARGB(255, 34, 82, 120),
-            color: Color.fromARGB(255, 214, 220, 255),
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-       /* ElevatedButton(
-          onPressed: (){
+        Text("TicTacToe",
+            style: TextStyle(
+              color: Color.fromARGB(221, 0, 0, 0),
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+            )),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: fSetter()),
+          onPressed: () {
             mode = !mode;
-          }, 
-          child: Text(modeButtonText)
-        ),*/
+            setColor = !setColor;
+            setState(() {
+              initializeGame();
+            });
+          },
+          child: Text(modeButtonText),
+        ),
         Text(
           "it is $currentPlayer turn",
           style: const TextStyle(
@@ -132,10 +137,21 @@ class _GamePageState extends State<GamePage> {
         }
 
         setState(() {
+          
           occupied[index] = currentPlayer;
-          changeTurn();
           checkForWinner();
-          checkForDraw();
+            checkForDraw();
+          if(mode){
+           
+            changeTurn();
+          }else{
+            
+            RandomicBotPlayer(gameEnd);
+            
+          }
+          //checkForWinner();
+          
+          
         });
       },
       child: Container(
@@ -143,7 +159,7 @@ class _GamePageState extends State<GamePage> {
             ? Color.fromARGB(255, 122, 122, 122)
             : occupied[index] == PLAYER_X
                 ? Colors.red
-                : Color.fromARGB(255, 34, 82, 120),
+                : const Color.fromARGB(255, 34, 82, 120),
         margin: const EdgeInsets.all(8),
         child: Center(
           child: Text(
@@ -235,7 +251,7 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
- /* showChangingModeMessage(String message) {
+  showChangingModeMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           backgroundColor: Color.fromARGB(255, 34, 82, 120),
@@ -247,5 +263,13 @@ class _GamePageState extends State<GamePage> {
             ),
           )),
     );
-  }*/
+  }
+
+  Color fSetter() {
+    if (setColor) {
+      return Colors.blue;
+    } else {
+      return Colors.green;
+    }
+  }
 }
