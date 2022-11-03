@@ -1,10 +1,4 @@
-# tic_tac_toe
+# TPSIT 2022-2023
 
-my project about the tictactoe
+that's my repository for the subject Tpsit for the season 2022-.
 
-## Getting Started
-That's a try to develope a working app about the game 'tictactoe'.
-the game now is working only in the mode 1v1.
-in the code, the commented parts are about the randomic playing by the computer. they are not finished.
-
-    -Giulio Puppa
